@@ -7,7 +7,6 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_HOST: ${PROD_DB_HOST}
       POSTGRES_USER: ${PROD_DB_USERNAME}
       POSTGRES_PASSWORD: ${PROD_DB_PASSWORD}
       POSTGRES_DB: ${PROD_DB_NAME}
@@ -20,7 +19,7 @@ services:
       - student_app
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB_STUDENT}", "-U", "${POSTGRES_USER_STUDENT}" ]
+      test: ["CMD", "pg_isready", "-q", "-d", "${PROD_DB_NAME}", "-U", "${PROD_DB_USERNAME}" ]
       interval: 1s
       timeout: 1s
       retries: 10
