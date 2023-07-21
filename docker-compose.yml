@@ -1,0 +1,53 @@
+version: '3.1'
+
+services:
+  postgres_student:
+    container_name: student_db
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: ${PROD_DB_HOST}
+      POSTGRES_USER: ${PROD_DB_USERNAME}
+      POSTGRES_PASSWORD: ${PROD_DB_PASSWORD}
+      POSTGRES_DB: ${PROD_DB_NAME}
+      PGDATA: /data/postgres
+    volumes:
+      - student_app:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - student_app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB_STUDENT}", "-U", "${POSTGRES_USER_STUDENT}" ]
+      interval: 1s
+      timeout: 1s
+      retries: 10
+
+  app_student:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      - SPRING.JPA.DATABASE=POSTGRESQL
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${PROD_DB_HOST}:${PROD_DB_PORT}/${PROD_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${PROD_DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${PROD_DB_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+    ports:
+      - "9091:9091"
+    networks:
+      - student_app
+    depends_on:
+      postgres_student:
+        condition: service_healthy
+
+networks:
+  student_app:
+    driver: bridge
+
+volumes:
+  student_app:
