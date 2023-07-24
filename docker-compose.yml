@@ -31,6 +31,7 @@ services:
     env_file:
       - .env
     environment:
+      - SPRING_PROFILES_ACTIVE=PROD
       - SPRING.JPA.DATABASE=POSTGRESQL
       - SPRING_DATASOURCE_URL=jdbc:postgresql://${PROD_DB_HOST}:${PROD_DB_PORT}/${PROD_DB_NAME}
       - SPRING_DATASOURCE_USERNAME=${PROD_DB_USERNAME}
