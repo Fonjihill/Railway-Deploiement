@@ -31,14 +31,14 @@ services:
     env_file:
       - .env
     environment:
-      - SPRING_PROFILES_ACTIVE=PROD
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - SPRING.JPA.DATABASE=POSTGRESQL
       - SPRING_DATASOURCE_URL=jdbc:postgresql://${PROD_DB_HOST}:${PROD_DB_PORT}/${PROD_DB_NAME}
       - SPRING_DATASOURCE_USERNAME=${PROD_DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${PROD_DB_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
     ports:
-      - "9091:9091"
+      - ${APP_PORT_PROD}:9091
     networks:
       - student_app
     depends_on:
