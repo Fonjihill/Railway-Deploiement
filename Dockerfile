@@ -10,6 +10,6 @@ FROM openjdk:17
 WORKDIR /app
 COPY --from=build /home/app/target/student-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
-EXPOSE 9091
+EXPOSE 8080
 
 
