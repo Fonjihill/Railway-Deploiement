@@ -14,7 +14,7 @@ services:
     volumes:
       - student_app:/data/postgres
     ports:
-      - "6030:6030"
+      - "5432:5432"
     networks:
       - student_app
     restart: unless-stopped
